@@ -251,6 +251,41 @@ export default function FlightBookingSection({
     }, 1900);
   };
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.__jetlyBookDemo = () => {
+        const offerToBook = offers[0];
+        if (!offerToBook) return;
+        const demoTicket = {
+          pnr: 'JTL-98K4V',
+          passengerName: 'Soumitra Samanta',
+          passengerEmail: 'soumitra@jetly-aviation.com',
+          origin: offerToBook.origin,
+          destination: offerToBook.destination,
+          date: departureDate,
+          returnDate: 'One-Way Charter',
+          departureTime: offerToBook.departureTime,
+          durationText: offerToBook.durationText,
+          distanceKm: offerToBook.distanceKm,
+          aircraft: offerToBook.aircraft,
+          tierName: offerToBook.tierName,
+          passengers: 2,
+          baggage: 'MEDIUM',
+          gate: 'VIP-02',
+          seat: '1A - 2A (VIP Suite)',
+          priceFormatted: '$1,308',
+          currency: 'USD',
+          weather: destWeather || { tempC: 28, windSpeedKmh: 12, condition: 'Clear Sky • CAVOK' },
+          bookedAt: '09:41 AM',
+        };
+        setPromoCode('JETLY20');
+        setPassengerName('Soumitra Samanta');
+        setConfirmedTicket(demoTicket);
+        if (onBookingConfirmed) onBookingConfirmed(demoTicket);
+      };
+    }
+  }, [offers, destWeather, departureDate]);
+
   const handleShareBoardingPass = async (ticket) => {
     const shareMessage = `✈️ JETLY VIP BOARDING PASS (${ticket.pnr})\nPassenger: ${ticket.passengerName}\nRoute: ${ticket.origin.city} (${ticket.origin.code}) → ${ticket.destination.city} (${ticket.destination.code})\nAircraft: ${ticket.aircraft} (${ticket.tierName})\nDate: ${ticket.date} at ${ticket.departureTime}\nGate: ${ticket.gate} • Seat: ${ticket.seat}\nTotal Rate: ${ticket.priceFormatted}`;
     try {

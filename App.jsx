@@ -101,6 +101,18 @@ export default function App() {
     setLandingTriggerKey((k) => k + 1);
   };
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.__jetlyControl = {
+        setTab: (t) => setActiveTab(t),
+        setCurr: (c) => setCurrency(c),
+        scrollToY: (y) => scrollRef.current?.scrollTo({ y, animated: false }),
+        addDemoTicket: (ticket) => handleBookingConfirmed(ticket),
+        openTicketsModal: (open) => setShowBookingsModal(open),
+      };
+    }
+  }, []);
+
   const recordSectionOffset = (key) => (e) => {
     const y = e?.nativeEvent?.layout?.y;
     if (typeof y === 'number') {
@@ -236,15 +248,22 @@ export default function App() {
 const styles = StyleSheet.create({
   outerBackground: {
     flex: 1,
+    height: '100%',
+    maxHeight: '100%',
     backgroundColor: '#040e08',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
   appShell: {
     flex: 1,
     width: '100%',
+    height: '100%',
+    maxHeight: '100%',
     backgroundColor: COLORS.primaryDark,
     overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
   },
   mobileSimulatorShell: {
     maxWidth: 430,
@@ -256,6 +275,7 @@ const styles = StyleSheet.create({
   },
   mainScroll: {
     flex: 1,
+    height: '100%',
   },
   scrollContent: {
     flexGrow: 1,
@@ -264,7 +284,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingTop: 10,
     backgroundColor: COLORS.primaryDark,
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'space-between',
   },
 });
